@@ -1095,18 +1095,87 @@
 
     .city-card {
       display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem 1.3rem;
+      flex-direction: column;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(175, 137, 44, 0.15);
       border-radius: 14px;
       transition: background 0.2s, border-color 0.2s;
+      cursor: pointer;
+      overflow: hidden;
     }
 
     .city-card:hover {
       background: rgba(175, 137, 44, 0.08);
       border-color: rgba(175, 137, 44, 0.35);
+    }
+
+    .city-card.open {
+      border-color: rgba(175, 137, 44, 0.5);
+      background: rgba(175, 137, 44, 0.06);
+    }
+
+    .city-card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.3rem;
+    }
+
+    .city-card-header .city-info {
+      flex: 1;
+    }
+
+    .city-arrow {
+      margin-left: auto;
+      font-size: 0.75rem;
+      color: var(--gold);
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .city-card.open .city-arrow {
+      transform: rotate(180deg);
+    }
+
+    .city-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      padding: 0 1.3rem;
+    }
+
+    .city-card.open .city-details {
+      max-height: 300px;
+      padding: 0 1.3rem 1.2rem;
+    }
+
+    .city-details-inner {
+      border-top: 1px solid rgba(175, 137, 44, 0.15);
+      padding-top: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem 1.2rem;
+    }
+
+    .city-detail-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .city-detail-item .detail-icon {
+      color: var(--gold);
+      font-size: 0.85rem;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+
+    .city-detail-item .detail-label {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.35);
+      display: block;
     }
 
     .city-dot {
@@ -1630,7 +1699,63 @@
     }
 
     .chat-send:hover { background: var(--gold-light); }
+
+    /* ─── MAP ─── */
+    .contacto-map-wrap {
+      flex: 1;
+      min-height: 420px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(175, 137, 44, 0.2);
+      box-shadow: 0 0 40px rgba(175, 137, 44, 0.08);
+      position: relative;
+    }
+
+    #goldenpets-map {
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+    }
+
+    /* Custom popup */
+    .leaflet-popup-content-wrapper {
+      background: #1A1409 !important;
+      border: 1px solid rgba(175, 137, 44, 0.4) !important;
+      border-radius: 12px !important;
+      color: #fff !important;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+    }
+
+    .leaflet-popup-tip {
+      background: #1A1409 !important;
+    }
+
+    .leaflet-popup-content {
+      margin: 12px 16px !important;
+      font-family: 'Nunito', sans-serif !important;
+    }
+
+    .map-popup-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #D4A840;
+      margin-bottom: 6px;
+    }
+
+    .map-popup-row {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.75);
+      margin: 3px 0;
+      display: flex;
+      gap: 6px;
+      align-items: flex-start;
+    }
+
+    .map-popup-row span:first-child {
+      flex-shrink: 0;
+    }
   </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 
 <body>
@@ -1800,62 +1925,143 @@
           comprar con amor.
         </p>
         <div class="cities-list reveal reveal-delay-3">
-          <div class="city-card">
-            <div class="city-dot"></div>
-            <div>
-              <div class="city-name">La Calera</div>
-              <div class="city-province">Córdoba, Argentina</div>
+
+          <!-- La Calera -->
+          <div class="city-card" onclick="toggleCityCard(this)">
+            <div class="city-card-header">
+              <div class="city-dot"></div>
+              <div class="city-info">
+                <div class="city-name">La Calera</div>
+                <div class="city-province">Córdoba, Argentina</div>
+              </div>
+              <span class="city-arrow">▼</span>
+            </div>
+            <div class="city-details">
+              <div class="city-details-inner">
+                <div class="city-detail-item">
+                  <span class="detail-icon">📍</span>
+                  <div>
+                    <span class="detail-label">Dirección</span>
+                    Av. San Martín 420, La Calera
+                  </div>
+                </div>
+                <div class="city-detail-item">
+                  <span class="detail-icon">📞</span>
+                  <div>
+                    <span class="detail-label">Teléfono</span>
+                    (351) 452-1100
+                  </div>
+                </div>
+                <div class="city-detail-item">
+                  <span class="detail-icon">✉️</span>
+                  <div>
+                    <span class="detail-label">Email</span>
+                    lacalera@goldenpets.com
+                  </div>
+                </div>
+                <div class="city-detail-item">
+                  <span class="detail-icon">🕐</span>
+                  <div>
+                    <span class="detail-label">Horarios</span>
+                    Lun–Vie 9:00–19:00 · Sáb 9:00–14:00
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="city-card">
-            <div class="city-dot"></div>
-            <div>
-              <div class="city-name">Córdoba Capital</div>
-              <div class="city-province">Córdoba, Argentina</div>
+
+          <!-- Córdoba Capital -->
+          <div class="city-card" onclick="toggleCityCard(this)">
+            <div class="city-card-header">
+              <div class="city-dot"></div>
+              <div class="city-info">
+                <div class="city-name">Córdoba Capital</div>
+                <div class="city-province">Córdoba, Argentina</div>
+              </div>
+              <span class="city-arrow">▼</span>
+            </div>
+            <div class="city-details">
+              <div class="city-details-inner">
+                <div class="city-detail-item">
+                  <span class="detail-icon">📍</span>
+                  <div>
+                    <span class="detail-label">Dirección</span>
+                    Bv. Chacabuco 1850, Córdoba Capital
+                  </div>
+                </div>
+                <div class="city-detail-item">
+                  <span class="detail-icon">📞</span>
+                  <div>
+                    <span class="detail-label">Teléfono</span>
+                    (351) 523-7700
+                  </div>
+                </div>
+                <div class="city-detail-item">
+                  <span class="detail-icon">✉️</span>
+                  <div>
+                    <span class="detail-label">Email</span>
+                    capital@goldenpets.com
+                  </div>
+                </div>
+                <div class="city-detail-item">
+                  <span class="detail-icon">🕐</span>
+                  <div>
+                    <span class="detail-label">Horarios</span>
+                    Lun–Sáb 9:00–20:00 · Dom 10:00–14:00
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="city-card">
-            <div class="city-dot"></div>
-            <div>
-              <div class="city-name">Alta Gracia</div>
-              <div class="city-province">Córdoba, Argentina</div>
+
+          <!-- Alta Gracia -->
+          <div class="city-card" onclick="toggleCityCard(this)">
+            <div class="city-card-header">
+              <div class="city-dot"></div>
+              <div class="city-info">
+                <div class="city-name">Alta Gracia</div>
+                <div class="city-province">Córdoba, Argentina</div>
+              </div>
+              <span class="city-arrow">▼</span>
+            </div>
+            <div class="city-details">
+              <div class="city-details-inner">
+                <div class="city-detail-item">
+                  <span class="detail-icon">📍</span>
+                  <div>
+                    <span class="detail-label">Dirección</span>
+                    Urquiza 305, Alta Gracia
+                  </div>
+                </div>
+                <div class="city-detail-item">
+                  <span class="detail-icon">📞</span>
+                  <div>
+                    <span class="detail-label">Teléfono</span>
+                    (3547) 42-8800
+                  </div>
+                </div>
+                <div class="city-detail-item">
+                  <span class="detail-icon">✉️</span>
+                  <div>
+                    <span class="detail-label">Email</span>
+                    altagracia@goldenpets.com
+                  </div>
+                </div>
+                <div class="city-detail-item">
+                  <span class="detail-icon">🕐</span>
+                  <div>
+                    <span class="detail-label">Horarios</span>
+                    Lun–Vie 9:00–18:00 · Sáb 9:00–13:00
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
-      <div class="contacto-right reveal reveal-delay-2">
-        <p class="contact-section-title">Seguinos y contactanos</p>
-        <p class="coming-soon-badge">Redes próximamente</p>
-        <div class="social-grid">
-          <a href="#" class="social-card">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-            </svg>
-            Instagram
-          </a>
-          <a href="#" class="social-card">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-            </svg>
-            Facebook
-          </a>
-          <a href="#" class="social-card">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.27 8.27 0 0 0 4.84 1.55V6.79a4.85 4.85 0 0 1-1.07-.1z" />
-            </svg>
-            TikTok
-          </a>
-        </div>
-        <a href="https://wa.me/5493000000000" class="whatsapp-btn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path
-              d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
-          </svg>
-          Contactar por WhatsApp
-        </a>
+      <div class="contacto-map-wrap reveal reveal-delay-2">
+        <div id="goldenpets-map"></div>
       </div>
     </div>
   </section>
@@ -2236,6 +2442,84 @@
         chatGreeted = true;
         setTimeout(() => addMsg('¡Hola! Soy Goldie, tu asistente de GoldenPets. ¿En qué te puedo ayudar?', 'bot'), 300);
       }
+    });
+
+    // ─── CITY CARD TOGGLE ───
+    function toggleCityCard(card) {
+      const isOpen = card.classList.contains('open');
+      document.querySelectorAll('.city-card.open').forEach(c => c.classList.remove('open'));
+      if (!isOpen) card.classList.add('open');
+    }
+  </script>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ─── MAPA GOLDENPETS ───
+    const map = L.map('goldenpets-map', {
+      center: [-31.48, -64.28],
+      zoom: 9,
+      scrollWheelZoom: false,
+      zoomControl: true
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/">CARTO</a>',
+      maxZoom: 19
+    }).addTo(map);
+
+    const goldIcon = L.divIcon({
+      className: '',
+      html: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="42" viewBox="0 0 30 42">
+        <path d="M15 0C6.716 0 0 6.716 0 15c0 10.5 15 27 15 27S30 25.5 30 15C30 6.716 23.284 0 15 0z" fill="#AF892C"/>
+        <circle cx="15" cy="15" r="7" fill="#fff" opacity="0.9"/>
+        <circle cx="15" cy="15" r="4" fill="#AF892C"/>
+      </svg>`,
+      iconSize: [30, 42],
+      iconAnchor: [15, 42],
+      popupAnchor: [0, -44]
+    });
+
+    const sucursales = [
+      {
+        nombre: 'La Calera',
+        lat: -31.3374,
+        lng: -64.3367,
+        direccion: 'Av. San Martín 420, La Calera',
+        telefono: '(351) 452-1100',
+        email: 'lacalera@goldenpets.com',
+        horarios: 'Lun–Vie 9:00–19:00 · Sáb 9:00–14:00'
+      },
+      {
+        nombre: 'Córdoba Capital',
+        lat: -31.4261,
+        lng: -64.1888,
+        direccion: 'Bv. Chacabuco 1850, Córdoba Capital',
+        telefono: '(351) 523-7700',
+        email: 'capital@goldenpets.com',
+        horarios: 'Lun–Sáb 9:00–20:00 · Dom 10:00–14:00'
+      },
+      {
+        nombre: 'Alta Gracia',
+        lat: -31.6548,
+        lng: -64.4326,
+        direccion: 'Urquiza 305, Alta Gracia',
+        telefono: '(3547) 42-8800',
+        email: 'altagracia@goldenpets.com',
+        horarios: 'Lun–Vie 9:00–18:00 · Sáb 9:00–13:00'
+      }
+    ];
+
+    sucursales.forEach(s => {
+      const popup = `
+        <div class="map-popup-title">📍 ${s.nombre}</div>
+        <div class="map-popup-row"><span>🏠</span><span>${s.direccion}</span></div>
+        <div class="map-popup-row"><span>📞</span><span>${s.telefono}</span></div>
+        <div class="map-popup-row"><span>✉️</span><span>${s.email}</span></div>
+        <div class="map-popup-row"><span>🕐</span><span>${s.horarios}</span></div>
+      `;
+      L.marker([s.lat, s.lng], { icon: goldIcon })
+        .addTo(map)
+        .bindPopup(popup, { maxWidth: 240 });
     });
   </script>
 
