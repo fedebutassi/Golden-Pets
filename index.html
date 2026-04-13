@@ -13,6 +13,7 @@
   <link rel="preload" as="image" href="recursos/logo_con_nombre.png" />
   <link rel="preload" as="image" href="recursos/Gato.png" />
   <link rel="preload" as="image" href="recursos/Perro.png" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     *,
     *::before,
@@ -2176,7 +2177,6 @@
       flex-shrink: 0;
     }
   </style>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 
 <body>
@@ -2595,8 +2595,15 @@
   <script>
     // ── NAV SCROLL ──
     const navbar = document.getElementById('navbar');
+    let scrollTicking = false;
     window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 60);
+      if (!scrollTicking) {
+        requestAnimationFrame(() => {
+          navbar.classList.toggle('scrolled', window.scrollY > 60);
+          scrollTicking = false;
+        });
+        scrollTicking = true;
+      }
     });
 
     // ── HAMBURGER ──
