@@ -10,6 +10,9 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,400&family=Nunito:wght@400;600;700;800;900&display=swap"
     rel="stylesheet" />
+  <link rel="preload" as="image" href="recursos/logo_con_nombre.png" />
+  <link rel="preload" as="image" href="recursos/Gato.png" />
+  <link rel="preload" as="image" href="recursos/Perro.png" />
   <style>
     *,
     *::before,
@@ -2186,7 +2189,7 @@
     <a href="#hero" class="nav-logo">
       <picture>
         <source srcset="recursos/Curvas.svg" type="image/svg+xml" />
-        <img src="recursos/logo_con_nombre.png" alt="GoldenPets" class="nav-logo-img" />
+        <img src="recursos/logo_con_nombre.png" alt="GoldenPets" class="nav-logo-img" width="460" height="106" />
       </picture>
     </a>
     <ul class="nav-links">
@@ -2229,7 +2232,7 @@
         <div class="hero-logo-img">
           <picture>
             <source srcset="recursos/Curvas.svg" type="image/svg+xml" />
-            <img src="recursos/logo_con_nombre.png" alt="GoldenPets" />
+            <img src="recursos/logo_con_nombre.png" alt="GoldenPets" width="460" height="106" />
           </picture>
         </div>
         <p class="hero-amor-infinito">Amor Infinito</p>
@@ -2250,11 +2253,11 @@
       <div class="hero-mascots">
         <picture class="mascot mascot-cat">
           <source srcset="recursos/Gato.svg" type="image/svg+xml" />
-          <img src="recursos/Gato.png" alt="Gatito GoldenPets" />
+          <img src="recursos/Gato.png" alt="Gatito GoldenPets" width="528" height="652" />
         </picture>
         <picture class="mascot mascot-dog">
           <source srcset="recursos/Perro.svg" type="image/svg+xml" />
-          <img src="recursos/Perro.png" alt="Perrito GoldenPets" />
+          <img src="recursos/Perro.png" alt="Perrito GoldenPets" width="1418" height="1078" />
         </picture>
       </div>
     </div>
@@ -2307,11 +2310,11 @@
         <div class="nosotros-mascots-row">
           <picture class="nosotros-mascot">
             <source srcset="recursos/PerroCostado.svg" type="image/svg+xml" />
-            <img src="recursos/PerroCostado.png" alt="Perrito GoldenPets" />
+            <img src="recursos/PerroCostado.png" alt="Perrito GoldenPets" width="508" height="566" loading="lazy" />
           </picture>
           <picture class="nosotros-mascot">
             <source srcset="recursos/GatoSentado.svg" type="image/svg+xml" />
-            <img src="recursos/GatoSentado.png" alt="Gatito GoldenPets" />
+            <img src="recursos/GatoSentado.png" alt="Gatito GoldenPets" width="381" height="682" loading="lazy" />
           </picture>
         </div>
       </div>
@@ -2523,7 +2526,7 @@
       <div class="footer-logo-wrap">
         <picture>
           <source srcset="recursos/Curvas.svg" type="image/svg+xml" />
-          <img src="recursos/logo_con_nombre.png" alt="GoldenPets" style="height:40px; width:auto;" />
+          <img src="recursos/logo_con_nombre.png" alt="GoldenPets" style="height:40px; width:auto;" width="460" height="106" loading="lazy" />
         </picture>
       </div>
       <ul class="footer-links">
@@ -2930,7 +2933,7 @@
     }
   </script>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
   <script>
     // ─── MAPA GOLDENPETS ───
     const map = L.map('goldenpets-map', {
